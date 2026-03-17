@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from ombra.decorators._function import ShaderFunction
-from ombra.glsl._emitter import emit_stmt
+from shadekit.decorators._function import ShaderFunction
+from shadekit.glsl._emitter import emit_stmt
 
 
 def emit_function(fn: ShaderFunction) -> str:

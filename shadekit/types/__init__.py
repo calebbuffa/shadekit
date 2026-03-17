@@ -1,4 +1,4 @@
-"""GLSL type system for ombra.
+"""GLSL type system for shadekit.
 
 Provides type descriptors for all GLSL built-in types, a ``@glsl_struct``
 decorator for generating struct declarations from Python dataclasses,
@@ -6,7 +6,7 @@ and type-inference utilities for binary operations and constructors.
 
 Quick start::
 
-    from ombra.types import Vec3, Float, Mat4, glsl_struct
+    from shadekit.types import Vec3, Float, Mat4, glsl_struct
     from dataclasses import dataclass
 
     @glsl_struct

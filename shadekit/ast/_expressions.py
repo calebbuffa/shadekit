@@ -1,10 +1,10 @@
 """GLSL expression AST nodes with operator overloading.
 
 Every node is an :class:`Expr` subclass carrying an inferred
-:class:`~ombra.types.ShaderMeta` type.  Python operators build the AST::
+:class:`~shadekit.types.ShaderMeta` type.  Python operators build the AST::
 
-    from ombra.ast import Variable
-    from ombra.types import Vec3, Float, Mat4
+    from shadekit.ast import Variable
+    from shadekit.types import Vec3, Float, Mat4
 
     pos   = Variable("pos", Vec3)
     scale = Variable("scale", Float)
@@ -18,14 +18,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from ombra.types._arrays import ArrayType
-from ombra.types._inference import infer_binary_type
-from ombra.types._matrices import MatrixType
-from ombra.types._scalars import Bool, Float, Int
-from ombra.types._vectors import VectorType
+from shadekit.types._arrays import ArrayType
+from shadekit.types._inference import infer_binary_type
+from shadekit.types._matrices import MatrixType
+from shadekit.types._scalars import Bool, Float, Int
+from shadekit.types._vectors import VectorType
 
 if TYPE_CHECKING:
-    from ombra.types._base import ShaderMeta
+    from shadekit.types._base import ShaderMeta
 
 
 # Operator precedence (lower = binds tighter)
@@ -223,7 +223,7 @@ class FunctionCall(Expr):
 
     ``FunctionCall("normalize", [v], Vec3)`` → ``"normalize(v)"``
 
-    When created by a :class:`~ombra.decorators.GlslFunction`, the
+    When created by a :class:`~shadekit.decorators.GlslFunction`, the
     ``_glsl_fn`` attribute holds a back-reference so the stage decorator
     can auto-include the function definition.
     """
@@ -370,7 +370,7 @@ def _infer_swizzle_type(parent_type: ShaderMeta, field: str) -> ShaderMeta:
             if n == 1:
                 return parent_type.component_type
             # Return vector of same component type with swizzle length.
-            from ombra.types._inference import _vec_for
+            from shadekit.types._inference import _vec_for
 
             return _vec_for(parent_type.component_type, n)
 
@@ -387,8 +387,8 @@ def _infer_index_type(parent_type: ShaderMeta) -> ShaderMeta:
         return parent_type.component_type
     if issubclass(parent_type, MatrixType):
         # mat4[0] yields a column vector
-        from ombra.types._inference import _vec_for
-        from ombra.types._scalars import Float
+        from shadekit.types._inference import _vec_for
+        from shadekit.types._scalars import Float
 
         return _vec_for(Float, parent_type.rows)
     # Unknown — return parent type (e.g. opaque buffer access)

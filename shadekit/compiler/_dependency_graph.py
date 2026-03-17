@@ -5,7 +5,7 @@ Detects circular dependencies.
 
 Usage::
 
-    from ombra.compiler import DependencyGraph
+    from shadekit.compiler import DependencyGraph
 
     graph = DependencyGraph()
     graph.add(luminance_fn)
@@ -15,8 +15,8 @@ Usage::
 
 from __future__ import annotations
 
-from ombra.compiler._ast_walk import find_called_names
-from ombra.decorators._function import ShaderFunction
+from shadekit.compiler._ast_walk import find_called_names
+from shadekit.decorators._function import ShaderFunction
 
 
 class CircularDependencyError(Exception):

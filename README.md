@@ -1,4 +1,4 @@
-# ombra
+# shadekit
 
 A Python library for composing GLSL shaders programmatically. Instead of writing shader source as raw strings, you describe them using Python — with a type system that maps directly to GLSL, an AST built through operator overloading, and a high-level `Program` API that handles stage assembly.
 
@@ -9,10 +9,10 @@ It targets GLSL 4.30 core by default and has no runtime dependencies. Python 3.1
 ## Quick start
 
 ```python
-from ombra.glsl import Program
-from ombra.types import Vec3, Vec4, Mat4, Sampler2D, Float
-from ombra.glsl import vec4, texture, dot, normalize
-from ombra.decorators import shader_function
+from shadekit.glsl import Program
+from shadekit.types import Vec3, Vec4, Mat4, Sampler2D, Float
+from shadekit.glsl import vec4, texture, dot, normalize
+from shadekit.decorators import shader_function
 
 # A reusable helper defined once, referenced in any stage
 @shader_function
@@ -65,7 +65,7 @@ Every GLSL type is a Python class. They're not meant to be instantiated — they
 **Arrays**:
 
 ```python
-from ombra.types import ArrayType, Float
+from shadekit.types import ArrayType, Float
 FloatArray256 = ArrayType(Float, 256)  # → "float[256]"
 ```
 
@@ -73,8 +73,8 @@ FloatArray256 = ArrayType(Float, 256)  # → "float[256]"
 
 ```python
 from dataclasses import dataclass
-from ombra.types import Vec3, Float
-from ombra.decorators import shader_struct
+from shadekit.types import Vec3, Float
+from shadekit.decorators import shader_struct
 
 @shader_struct
 @dataclass
@@ -92,9 +92,9 @@ class Material:
 `@shader_function` turns a Python function into a reusable GLSL function. The body runs at decoration time with `Variable` placeholder arguments, and the result is captured as an AST.
 
 ```python
-from ombra.decorators import shader_function
-from ombra.types import Vec3, Float
-from ombra.glsl import dot, normalize, clamp
+from shadekit.decorators import shader_function
+from shadekit.types import Vec3, Float
+from shadekit.glsl import dot, normalize, clamp
 
 @shader_function
 def diffuse(normal: Vec3, light_dir: Vec3) -> Float:
@@ -115,7 +115,7 @@ Calling the decorated function produces a `FunctionCall` AST node, not a Python 
 You generally don't need to build AST nodes by hand — the builtins and constructors do it for you. But when you need to, the full node set is available.
 
 ```python
-from ombra.ast import Variable, Literal, BinaryOp, If, For, Assignment, Declaration
+from shadekit.ast import Variable, Literal, BinaryOp, If, For, Assignment, Declaration
 
 x = Variable("x", Float)
 y = Variable("y", Float)
@@ -140,10 +140,10 @@ Supported statement types: `Declaration`, `Assignment`, `CompoundAssignment`, `R
 
 ## Built-ins
 
-All standard GLSL built-in functions are available from `ombra.glsl`:
+All standard GLSL built-in functions are available from `shadekit.glsl`:
 
 ```python
-from ombra.glsl import (
+from shadekit.glsl import (
     normalize, dot, cross, reflect, refract,
     texture, texelFetch,
     mix, clamp, smoothstep, step,
@@ -159,7 +159,7 @@ from ombra.glsl import (
 Constructors:
 
 ```python
-from ombra.glsl import vec2, vec3, vec4, mat4, ivec2, uvec4
+from shadekit.glsl import vec2, vec3, vec4, mat4, ivec2, uvec4
 ```
 
 ---
@@ -225,7 +225,7 @@ vert, frag = prog.build()
 A few lower-level tools are exposed if you need them directly:
 
 ```python
-from ombra.compiler import (
+from shadekit.compiler import (
     fold_constants,            # constant folding pass over an AST
     eliminate_dead_functions,  # dead code elimination
     DependencyGraph,           # topological sort of @shader_function deps
@@ -243,7 +243,7 @@ These run automatically inside `Program.build()`. You'd use them directly only i
 `ShaderBuilder` is the lower-level API that `Program` wraps. Use it if you need direct control over what goes into each stage.
 
 ```python
-from ombra.glsl import ShaderBuilder, ShaderStage
+from shadekit.glsl import ShaderBuilder, ShaderStage
 
 b = ShaderBuilder(version="430", profile="core")
 b.add_define("FOO", stage=ShaderStage.VERTEX)

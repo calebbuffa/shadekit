@@ -7,8 +7,8 @@ uniforms, and SSBOs, write ``main()`` in Python, and build.
 
 Usage — vertex + fragment raster program::
 
-    from ombra.glsl import Program, vec4, normalize
-    from ombra.types import Float, Vec3, Vec4, Mat4, UInt
+    from shadekit.glsl import Program, vec4, normalize
+    from shadekit.types import Float, Vec3, Vec4, Mat4, UInt
 
     prog = Program()
 
@@ -36,7 +36,7 @@ Usage — vertex + fragment raster program::
 
 Usage — compute shader::
 
-    from ombra.glsl import Program
+    from shadekit.glsl import Program
 
     prog = Program()
     prog.local_size(256)
@@ -61,16 +61,19 @@ import textwrap
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from ombra.ast._block import Block
-from ombra.ast._expressions import Variable
-from ombra.ast._statements import Stmt
-from ombra.compiler._ast_walk import collect_shader_functions, collect_transitive_deps
-from ombra.glsl._builder import ShaderBuilder, ShaderStage
-from ombra.types._base import ShaderMeta
-from ombra.types._structs import StructType
+from shadekit.ast._block import Block
+from shadekit.ast._expressions import Variable
+from shadekit.ast._statements import Stmt
+from shadekit.compiler._ast_walk import (
+    collect_shader_functions,
+    collect_transitive_deps,
+)
+from shadekit.glsl._builder import ShaderBuilder, ShaderStage
+from shadekit.types._base import ShaderMeta
+from shadekit.types._structs import StructType
 
 if TYPE_CHECKING:
-    from ombra.decorators._function import ShaderFunction
+    from shadekit.decorators._function import ShaderFunction
 
 
 class Stage(str):
@@ -561,7 +564,7 @@ class _StageDecorator:
         - ``list[Stmt]``, ``Block``, or ``Stmt``: AST statements, added via ``add_*_stmts``
         - ``None``: no-op (code was added via side effects)
 
-        Any :func:`@glsl_function <ombra.decorators.glsl_function>`
+        Any :func:`@glsl_function <shadekit.decorators.glsl_function>`
         calls found in the AST are automatically included in the shader
         (no manual ``prog.include()`` required).
         """

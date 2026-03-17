@@ -59,7 +59,7 @@ def shader_struct(cls: type) -> type:
     Usage::
 
         from dataclasses import dataclass
-        from ombra.types import Vec3, Float, shader_struct
+        from shadekit.types import Vec3, Float, shader_struct
 
         @shader_struct
         @dataclass

@@ -2,8 +2,8 @@
 
 Usage::
 
-    from ombra.decorators import shader_function
-    from ombra.types import Vec3, Float
+    from shadekit.decorators import shader_function
+    from shadekit.types import Vec3, Float
 
     @shader_function
     def luminance(c: Vec3) -> Float:
@@ -19,12 +19,12 @@ from __future__ import annotations
 import inspect
 from typing import TYPE_CHECKING, Any, Callable, get_type_hints
 
-from ombra.ast._expressions import Expr, FunctionCall, Variable
-from ombra.ast._statements import Return, Stmt
-from ombra.types._scalars import Float
+from shadekit.ast._expressions import Expr, FunctionCall, Variable
+from shadekit.ast._statements import Return, Stmt
+from shadekit.types._scalars import Float
 
 if TYPE_CHECKING:
-    from ombra.types._base import ShaderMeta
+    from shadekit.types._base import ShaderMeta
 
 
 class ShaderFunction:
@@ -34,7 +34,7 @@ class ShaderFunction:
     The ``body`` attribute holds the captured statements.
 
     Dependencies between ``ShaderFunction`` instances are resolved at
-    emit time by :class:`~ombra.compiler.DependencyGraph`, not stored
+    emit time by :class:`~shadekit.compiler.DependencyGraph`, not stored
     on the function itself.
     """
 

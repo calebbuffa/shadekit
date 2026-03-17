@@ -2,9 +2,9 @@
 
 Usage::
 
-    from ombra.compiler import emit
-    from ombra.ast import Variable, Literal
-    from ombra.types import Float, Vec3
+    from shadekit.compiler import emit
+    from shadekit.ast import Variable, Literal
+    from shadekit.types import Float, Vec3
 
     pos   = Variable("pos", Vec3)
     scale = Literal(2.0, Float)
@@ -13,7 +13,7 @@ Usage::
 
 from __future__ import annotations
 
-from ombra.ast._expressions import (
+from shadekit.ast._expressions import (
     _PRECEDENCE,
     BinaryOp,
     ConstructorCall,
@@ -27,7 +27,7 @@ from ombra.ast._expressions import (
     UnaryOp,
     Variable,
 )
-from ombra.ast._statements import (
+from shadekit.ast._statements import (
     Assignment,
     Break,
     CompoundAssignment,

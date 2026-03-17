@@ -1,12 +1,12 @@
 """GLSL statement AST nodes.
 
 Statements are used to build function bodies. They reference
-:class:`~ombra.ast._expressions.Expr` nodes for values.
+:class:`~shadekit.ast._expressions.Expr` nodes for values.
 
 ::
 
-    from ombra.ast import Variable, Literal, Assignment, Declaration, Return
-    from ombra.types import Float, Vec3
+    from shadekit.ast import Variable, Literal, Assignment, Declaration, Return
+    from shadekit.types import Float, Vec3
 
     pos = Variable("pos", Vec3)
     result = Declaration("result", Vec3, pos * Literal(2.0, Float))
@@ -19,9 +19,9 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ombra.types._base import ShaderMeta
+    from shadekit.types._base import ShaderMeta
 
-from ombra.ast._expressions import Expr
+from shadekit.ast._expressions import Expr
 
 
 class Stmt:

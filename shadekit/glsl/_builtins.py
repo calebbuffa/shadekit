@@ -1,11 +1,11 @@
 """GLSL built-in function proxies for use inside ``@shader_function`` bodies.
 
 Each proxy is a plain Python function that returns an AST
-:class:`~ombra.ast.FunctionCall` or :class:`~ombra.ast.ConstructorCall`
+:class:`~shadekit.ast.FunctionCall` or :class:`~shadekit.ast.ConstructorCall`
 node. This lets ``@shader_function``-decorated code read naturally::
 
-    from ombra.glsl import dot, vec3
-    from ombra.decorators import shader_function
+    from shadekit.glsl import dot, vec3
+    from shadekit.decorators import shader_function
 
     @shader_function
     def luminance(c: Vec3) -> Float:
@@ -16,14 +16,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Callable
 
-import ombra.types as t
-from ombra.ast._expressions import ConstructorCall, Expr, FunctionCall, Literal
-from ombra.types._inference import _vec_for
-from ombra.types._scalars import Bool, Float, Int, UInt
-from ombra.types._vectors import Vec2, Vec4, VectorType
+import shadekit.types as t
+from shadekit.ast._expressions import ConstructorCall, Expr, FunctionCall, Literal
+from shadekit.types._inference import _vec_for
+from shadekit.types._scalars import Bool, Float, Int, UInt
+from shadekit.types._vectors import Vec2, Vec4, VectorType
 
 if TYPE_CHECKING:
-    from ombra.types._base import ShaderMeta
+    from shadekit.types._base import ShaderMeta
 
 
 def _coerce_arg(a: Any) -> Expr:

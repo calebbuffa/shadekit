@@ -1,4 +1,4 @@
-"""Tests for ombra Phase 7 — GLSL feature completeness.
+"""Tests for shadekit Phase 7 — GLSL feature completeness.
 
 Covers:
 - New expression nodes (IndexAccess, Ternary, PostfixOp)
@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import pytest
 
-from ombra.ast import (
+from shadekit.ast import (
     Assignment,
     BinaryOp,
     Break,
@@ -46,10 +46,10 @@ from ombra.ast import (
     pre_increment,
     ternary,
 )
-from ombra.compiler._optimizer import fold_expr, fold_stmt
-from ombra.glsl import Program, emit
-from ombra.glsl._emitter import emit_stmt
-from ombra.types import (
+from shadekit.compiler._optimizer import fold_expr, fold_stmt
+from shadekit.glsl import Program, emit
+from shadekit.glsl._emitter import emit_stmt
+from shadekit.types import (
     ArrayType,
     AtomicUint,
     Bool,
@@ -836,8 +836,8 @@ class TestNewBuiltins:
     """Verify new builtins produce correct FunctionCall nodes."""
 
     def test_hyperbolic_functions(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import acosh, asinh, atanh, cosh, sinh, tanh
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import acosh, asinh, atanh, cosh, sinh, tanh
 
         x = Variable("x", Float)
         for fn in [sinh, cosh, tanh, asinh, acosh, atanh]:
@@ -846,8 +846,8 @@ class TestNewBuiltins:
             assert result.glsl_type is Float
 
     def test_rounding_functions(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import roundEven, trunc
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import roundEven, trunc
 
         x = Variable("x", Float)
         for fn in [roundEven, trunc]:
@@ -856,8 +856,8 @@ class TestNewBuiltins:
             assert result.glsl_type is Float
 
     def test_float_queries(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import isinf, isnan
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import isinf, isnan
 
         x = Variable("x", Float)
         for fn in [isnan, isinf]:
@@ -866,8 +866,8 @@ class TestNewBuiltins:
             assert result.glsl_type is Bool
 
     def test_bit_conversion(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import (
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import (
             floatBitsToInt,
             floatBitsToUint,
             intBitsToFloat,
@@ -894,8 +894,8 @@ class TestNewBuiltins:
         assert r4.glsl_type is Float
 
     def test_packing(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import packUnorm2x16, unpackUnorm2x16
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import packUnorm2x16, unpackUnorm2x16
 
         v = Variable("v", Vec2)
         result = packUnorm2x16(v)
@@ -908,8 +908,8 @@ class TestNewBuiltins:
         assert result2.glsl_type is Vec2
 
     def test_integer_bit_manipulation(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import bitCount, findLSB, findMSB
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import bitCount, findLSB, findMSB
 
         x = Variable("x", Int)
         for fn in [bitCount, findLSB, findMSB]:
@@ -918,8 +918,8 @@ class TestNewBuiltins:
             assert result.glsl_type is Int
 
     def test_vector_relational(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import lessThan
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import lessThan
 
         a = Variable("a", Vec3)
         b = Variable("b", Vec3)
@@ -928,8 +928,8 @@ class TestNewBuiltins:
         assert result.glsl_type is BVec3
 
     def test_texture_lookup(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import textureLod
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import textureLod
 
         s = Variable("s", Sampler2D)
         uv = Variable("uv", Vec2)
@@ -939,8 +939,8 @@ class TestNewBuiltins:
         assert result.glsl_type is Vec4
 
     def test_fragment_derivatives(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import dFdx, dFdy, fwidth
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import dFdx, dFdy, fwidth
 
         x = Variable("x", Float)
         for fn in [dFdx, dFdy, fwidth]:
@@ -949,31 +949,31 @@ class TestNewBuiltins:
             assert result.glsl_type is Float
 
     def test_geometry_shader_builtins(self) -> None:
-        from ombra.ast._expressions import FunctionCall
-        from ombra.glsl._builtins import EmitVertex, EndPrimitive
+        from shadekit.ast._expressions import FunctionCall
+        from shadekit.glsl._builtins import EmitVertex, EndPrimitive
 
         for fn in [EmitVertex, EndPrimitive]:
             result = fn()
             assert isinstance(result, FunctionCall)
 
     def test_bvec_constructors(self) -> None:
-        from ombra.ast._expressions import ConstructorCall
-        from ombra.glsl._builtins import bvec2
+        from shadekit.ast._expressions import ConstructorCall
+        from shadekit.glsl._builtins import bvec2
 
         r2 = bvec2(Literal(True, Bool), Literal(False, Bool))
         assert isinstance(r2, ConstructorCall)
         assert r2.glsl_type is BVec2
 
     def test_dvec_constructors(self) -> None:
-        from ombra.ast._expressions import ConstructorCall
-        from ombra.glsl._builtins import dvec2
+        from shadekit.ast._expressions import ConstructorCall
+        from shadekit.glsl._builtins import dvec2
 
         r2 = dvec2(Variable("a", Double), Variable("b", Double))
         assert isinstance(r2, ConstructorCall)
         assert r2.glsl_type is DVec2
 
     def test_builtin_emits_correct_glsl(self) -> None:
-        from ombra.glsl._builtins import sinh
+        from shadekit.glsl._builtins import sinh
 
         x = Variable("x", Float)
         assert emit(sinh(x)) == "sinh(x)"
@@ -986,7 +986,7 @@ class TestNewBuiltins:
 
 class TestBuilderNewFeatures:
     def test_extension(self) -> None:
-        from ombra.glsl._builder import ShaderBuilder
+        from shadekit.glsl._builder import ShaderBuilder
 
         b = ShaderBuilder(version="430")
         b.add_extension("GL_ARB_gpu_shader5", "enable")
@@ -996,7 +996,7 @@ class TestBuilderNewFeatures:
         assert "#extension GL_ARB_gpu_shader5 : enable" in vert
 
     def test_vertex_input(self) -> None:
-        from ombra.glsl._builder import ShaderBuilder
+        from shadekit.glsl._builder import ShaderBuilder
 
         b = ShaderBuilder(version="430")
         b.add_vertex_input(0, "vec3", "aPosition")
@@ -1006,7 +1006,7 @@ class TestBuilderNewFeatures:
         assert "layout(location = 0) in vec3 aPosition;" in vert
 
     def test_uniform_with_binding(self) -> None:
-        from ombra.glsl._builder import ShaderBuilder, ShaderStage
+        from shadekit.glsl._builder import ShaderBuilder, ShaderStage
 
         b = ShaderBuilder(version="430")
         b.add_uniform("sampler2D", "tex", ShaderStage.FRAGMENT, binding=3)
@@ -1016,7 +1016,7 @@ class TestBuilderNewFeatures:
         assert "layout(binding = 3) uniform sampler2D tex;" in frag
 
     def test_varying_noperspective(self) -> None:
-        from ombra.glsl._builder import ShaderBuilder
+        from shadekit.glsl._builder import ShaderBuilder
 
         b = ShaderBuilder(version="430")
         b.add_varying("vec2", "v_uv", noperspective=True)
@@ -1027,7 +1027,7 @@ class TestBuilderNewFeatures:
         assert "noperspective in vec2 v_uv;" in frag
 
     def test_varying_centroid(self) -> None:
-        from ombra.glsl._builder import ShaderBuilder
+        from shadekit.glsl._builder import ShaderBuilder
 
         b = ShaderBuilder(version="430")
         b.add_varying("vec3", "v_color", centroid=True)
@@ -1038,7 +1038,7 @@ class TestBuilderNewFeatures:
         assert "centroid in vec3 v_color;" in frag
 
     def test_shared_variable(self) -> None:
-        from ombra.glsl._builder import ShaderBuilder
+        from shadekit.glsl._builder import ShaderBuilder
 
         b = ShaderBuilder(version="430")
         b.add_local_size(256)
@@ -1048,7 +1048,7 @@ class TestBuilderNewFeatures:
         assert "shared float cache[256];" in src
 
     def test_profile_core(self) -> None:
-        from ombra.glsl._builder import ShaderBuilder
+        from shadekit.glsl._builder import ShaderBuilder
 
         b = ShaderBuilder(version="430", profile="core")
         b.add_vertex_lines(["void main() { }"])
@@ -1057,7 +1057,7 @@ class TestBuilderNewFeatures:
         assert "#version 430 core" in vert
 
     def test_profile_empty(self) -> None:
-        from ombra.glsl._builder import ShaderBuilder
+        from shadekit.glsl._builder import ShaderBuilder
 
         b = ShaderBuilder(version="430", profile="")
         b.add_vertex_lines(["void main() { }"])
@@ -1073,7 +1073,7 @@ class TestBuilderNewFeatures:
 
 class TestAssemblerNewParams:
     def test_extensions_emitted_after_version(self) -> None:
-        from ombra.glsl._assembler import assemble_stage
+        from shadekit.glsl._assembler import assemble_stage
 
         src = assemble_stage(
             version="430 core",
@@ -1094,7 +1094,7 @@ class TestAssemblerNewParams:
         assert lines[1] == "#extension GL_ARB_gpu_shader5 : enable"
 
     def test_inputs_emitted(self) -> None:
-        from ombra.glsl._assembler import assemble_stage
+        from shadekit.glsl._assembler import assemble_stage
 
         src = assemble_stage(
             version="430 core",
@@ -1113,7 +1113,7 @@ class TestAssemblerNewParams:
         assert "layout(location = 0) in vec3 aPosition;" in src
 
     def test_shared_vars_emitted(self) -> None:
-        from ombra.glsl._assembler import assemble_stage
+        from shadekit.glsl._assembler import assemble_stage
 
         src = assemble_stage(
             version="430 core",
@@ -1279,7 +1279,7 @@ class TestEndToEndNewFeatures:
 
         @prog.fragment
         def fs():
-            from ombra.glsl._builtins import vec4
+            from shadekit.glsl._builtins import vec4
 
             result = Declaration("result", Float, ternary(u_flag, u_a, u_b))
             out = Assignment(f_color, vec4(Variable("result", Float)))

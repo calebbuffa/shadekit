@@ -5,7 +5,7 @@ nodes, and removes identity operations (``x * 1.0``, ``x + 0.0``, etc.).
 
 Usage::
 
-    from ombra.compiler import fold_constants
+    from shadekit.compiler import fold_constants
     optimized_expr = fold_constants(expr)
 """
 
@@ -14,7 +14,7 @@ from __future__ import annotations
 import operator
 from typing import TYPE_CHECKING
 
-from ombra.ast._expressions import (
+from shadekit.ast._expressions import (
     BinaryOp,
     ConstructorCall,
     Expr,
@@ -27,7 +27,7 @@ from ombra.ast._expressions import (
     UnaryOp,
     Variable,
 )
-from ombra.ast._statements import (
+from shadekit.ast._statements import (
     Assignment,
     CompoundAssignment,
     Declaration,
@@ -145,7 +145,7 @@ def _fold_binary(
             except (ZeroDivisionError, ArithmeticError):
                 pass
             else:
-                from ombra.types._scalars import Bool
+                from shadekit.types._scalars import Bool
 
                 if isinstance(result, bool):
                     return Literal(result, Bool)

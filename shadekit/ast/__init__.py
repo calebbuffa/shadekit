@@ -1,5 +1,5 @@
-from ombra.ast._block import Block
-from ombra.ast._expressions import (
+from shadekit.ast._block import Block
+from shadekit.ast._expressions import (
     BinaryOp,
     ConstructorCall,
     Expr,
@@ -20,7 +20,7 @@ from ombra.ast._expressions import (
     pre_increment,
     ternary,
 )
-from ombra.ast._statements import (
+from shadekit.ast._statements import (
     Assignment,
     Break,
     CompoundAssignment,

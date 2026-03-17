@@ -1,14 +1,14 @@
 """Statement block collector for pure-Python shader authoring.
 
 :class:`Block` provides an ergonomic way to build ``main()`` bodies
-using Python expressions and the ombra AST, then return them from
+using Python expressions and the shadekit AST, then return them from
 ``@prog.vertex`` / ``@prog.fragment`` / ``@prog.compute`` decorators.
 
 Usage::
 
-    from ombra.glsl import Program, vec3, vec4, mat3, normalize
-    from ombra.types import Float, Vec3, Vec4, Mat4
-    from ombra.ast import Block
+    from shadekit.glsl import Program, vec3, vec4, mat3, normalize
+    from shadekit.types import Float, Vec3, Vec4, Mat4
+    from shadekit.ast import Block
 
     prog = Program()
     u_mvp = prog.uniform("u_mvp", Mat4)
@@ -27,8 +27,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from ombra.ast._expressions import Expr, Variable, _coerce
-from ombra.ast._statements import (
+from shadekit.ast._expressions import Expr, Variable, _coerce
+from shadekit.ast._statements import (
     Assignment,
     Break,
     CompoundAssignment,
@@ -41,7 +41,7 @@ from ombra.ast._statements import (
 )
 
 if TYPE_CHECKING:
-    from ombra.types._base import ShaderMeta
+    from shadekit.types._base import ShaderMeta
 
 
 class Block:

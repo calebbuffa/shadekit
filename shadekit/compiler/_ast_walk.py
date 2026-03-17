@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from ombra.ast._expressions import (
+from shadekit.ast._expressions import (
     BinaryOp,
     ConstructorCall,
     Expr,
@@ -13,7 +13,7 @@ from ombra.ast._expressions import (
     Ternary,
     UnaryOp,
 )
-from ombra.ast._statements import (
+from shadekit.ast._statements import (
     Assignment,
     CompoundAssignment,
     Declaration,
@@ -26,7 +26,7 @@ from ombra.ast._statements import (
     Switch,
     While,
 )
-from ombra.decorators._function import ShaderFunction
+from shadekit.decorators._function import ShaderFunction
 
 
 def walk_expr(expr: Expr, on_expr: Callable[[Expr], None]) -> None:

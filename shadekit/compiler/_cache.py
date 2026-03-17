@@ -6,7 +6,7 @@ recompilation in the host application.
 
 Usage::
 
-    from ombra.compiler import ShaderCache
+    from shadekit.compiler import ShaderCache
 
     cache = ShaderCache()
     key, (vert, frag) = cache.get_or_build(builder)
@@ -19,7 +19,7 @@ import hashlib
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ombra.glsl._builder import ShaderBuilder
+    from shadekit.glsl._builder import ShaderBuilder
 
 
 class ShaderCache:

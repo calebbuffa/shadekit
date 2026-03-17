@@ -5,7 +5,7 @@ before the host application attempts GPU compilation.
 
 Usage::
 
-    from ombra.compiler import validate_shader
+    from shadekit.compiler import validate_shader
     errors = validate_shader(builder)
     for err in errors:
         print(err)
@@ -19,7 +19,7 @@ from enum import Enum
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ombra.glsl._builder import ShaderBuilder
+    from shadekit.glsl._builder import ShaderBuilder
 
 
 class Severity(Enum):

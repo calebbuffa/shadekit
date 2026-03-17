@@ -6,7 +6,7 @@ entry-point function names.  Also detects unused uniforms in a
 
 Usage::
 
-    from ombra.compiler import eliminate_dead_functions
+    from shadekit.compiler import eliminate_dead_functions
     live = eliminate_dead_functions(all_fns, entry_names={"main"})
 """
 
@@ -14,9 +14,9 @@ from __future__ import annotations
 
 import re
 
-from ombra.ast._expressions import FunctionCall, Variable
-from ombra.compiler._ast_walk import find_called_names, walk_stmt
-from ombra.decorators._function import ShaderFunction
+from shadekit.ast._expressions import FunctionCall, Variable
+from shadekit.compiler._ast_walk import find_called_names, walk_stmt
+from shadekit.decorators._function import ShaderFunction
 
 
 def eliminate_dead_functions(

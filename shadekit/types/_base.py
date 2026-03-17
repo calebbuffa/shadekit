@@ -50,7 +50,7 @@ class ShaderType(metaclass=ShaderMeta):
     Under ``TYPE_CHECKING``, instances also expose arithmetic and
     attribute-access stubs so that ``@shader_function`` bodies — where
     parameters are annotated with shader type classes but receive
-    :class:`~ombra.ast.Expr` nodes at runtime — type-check correctly.
+    :class:`~shadekit.ast.Expr` nodes at runtime — type-check correctly.
     """
 
     glsl_name = ""

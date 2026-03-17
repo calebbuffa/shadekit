@@ -9,7 +9,7 @@ vertex pulling.
 
 Usage::
 
-    from ombra import ShaderBuilder, ShaderStage
+    from shadekit import ShaderBuilder, ShaderStage
 
     b = ShaderBuilder()
     b.add_define("HAS_NORMALS")
@@ -37,10 +37,10 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ombra.decorators._function import ShaderFunction
+    from shadekit.decorators._function import ShaderFunction
 
-from ombra.ast._statements import Stmt
-from ombra.types._structs import StructType
+from shadekit.ast._statements import Stmt
+from shadekit.types._structs import StructType
 
 _LOCAL_SIZE_RE = re.compile(
     r"^\s*layout\s*\("
@@ -374,7 +374,7 @@ class ShaderBuilder:
         struct_type: StructType,
         stage: ShaderStage,
     ) -> "ShaderBuilder":
-        """Add a :class:`~ombra.types.StructType` declaration.
+        """Add a :class:`~shadekit.types.StructType` declaration.
 
         Generates the ``struct … { … };`` block from the type's
         :meth:`declaration` and injects it into the specified stage(s).
@@ -541,7 +541,7 @@ class ShaderBuilder:
 
     def build(self) -> tuple[str, str]:
         """Assemble and return ``(vertex_source, fragment_source)``."""
-        from ombra.glsl._assembler import assemble_stage
+        from shadekit.glsl._assembler import assemble_stage
 
         version_str = (
             f"{self._version} {self._profile}" if self._profile else self._version
@@ -593,7 +593,7 @@ class ShaderBuilder:
         ``add_*(stage=ShaderStage.COMPUTE)``, :meth:`add_compute_lines`,
         :meth:`add_compute_stmts`, and :meth:`add_local_size`).
         """
-        from ombra.glsl._assembler import assemble_stage
+        from shadekit.glsl._assembler import assemble_stage
 
         version_str = (
             f"{self._version} {self._profile}" if self._profile else self._version

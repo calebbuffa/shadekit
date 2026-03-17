@@ -7,11 +7,11 @@ resolution, AST emission) in the compiler package where it belongs.
 
 from __future__ import annotations
 
-from ombra.ast._statements import Stmt
-from ombra.compiler._dependency_graph import DependencyGraph
-from ombra.decorators._function import ShaderFunction
-from ombra.glsl._emitter import emit_stmt
-from ombra.glsl._function_emitter import emit_function
+from shadekit.ast._statements import Stmt
+from shadekit.compiler._dependency_graph import DependencyGraph
+from shadekit.decorators._function import ShaderFunction
+from shadekit.glsl._emitter import emit_stmt
+from shadekit.glsl._function_emitter import emit_function
 
 
 def assemble_stage(
@@ -35,7 +35,7 @@ def assemble_stage(
     """Format a single shader stage into a GLSL source string.
 
     Parameters are the raw declaration lists accumulated by
-    :class:`~ombra.builder.ShaderBuilder`.  This function owns the
+    :class:`~shadekit.builder.ShaderBuilder`.  This function owns the
     dependency-graph resolution and AST emission.
     """
     parts: list[str] = [f"#version {version}"]

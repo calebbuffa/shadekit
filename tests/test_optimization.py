@@ -1,4 +1,4 @@
-"""Tests for ombra Phase 5 — Optimization & Tooling.
+"""Tests for shadekit Phase 5 — Optimization & Tooling.
 
 Covers:
 - Constant folding (_optimizer.py)
@@ -9,7 +9,7 @@ Covers:
 
 from __future__ import annotations
 
-from ombra.ast._expressions import (
+from shadekit.ast._expressions import (
     BinaryOp,
     ConstructorCall,
     FieldAccess,
@@ -18,7 +18,7 @@ from ombra.ast._expressions import (
     UnaryOp,
     Variable,
 )
-from ombra.ast._statements import (
+from shadekit.ast._statements import (
     Assignment,
     Declaration,
     ExpressionStatement,
@@ -26,21 +26,21 @@ from ombra.ast._statements import (
     If,
     Return,
 )
-from ombra.compiler._cache import ShaderCache, hash_sources
-from ombra.compiler._dce import eliminate_dead_functions, find_referenced_names
-from ombra.compiler._optimizer import fold_constants, fold_expr, fold_stmt
-from ombra.decorators import ShaderFunction
-from ombra.glsl import (
+from shadekit.compiler._cache import ShaderCache, hash_sources
+from shadekit.compiler._dce import eliminate_dead_functions, find_referenced_names
+from shadekit.compiler._optimizer import fold_constants, fold_expr, fold_stmt
+from shadekit.decorators import ShaderFunction
+from shadekit.glsl import (
     ShaderBuilder,
     ShaderStage,
 )
-from ombra.glsl._validation import (
+from shadekit.glsl._validation import (
     Severity,
     ValidationError,
     validate_builder,
     validate_source,
 )
-from ombra.types import Bool, Float, Int, Vec3
+from shadekit.types import Bool, Float, Int, Vec3
 
 # ═════════════════════════════════════════════════════════════════════
 # Constant Folding

@@ -1,4 +1,4 @@
-"""Tests for ombra.glsl.Program — high-level Program API.
+"""Tests for shadekit.glsl.Program — high-level Program API.
 
 Covers:
 - Program construction and build
@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import pytest
 
-from ombra.ast import (
+from shadekit.ast import (
     Assignment,
     Block,
     Declaration,
@@ -23,10 +23,10 @@ from ombra.ast import (
     Return,
     Variable,
 )
-from ombra.decorators import shader_function
-from ombra.glsl import Program
-from ombra.glsl._builtins import dot, mat3, vec3, vec4
-from ombra.types import (
+from shadekit.decorators import shader_function
+from shadekit.glsl import Program
+from shadekit.glsl._builtins import dot, mat3, vec3, vec4
+from shadekit.types import (
     Float,
     Int,
     Mat4,
@@ -276,9 +276,9 @@ def _luminance(c: Vec3) -> Float:
 
 @shader_function
 def _saturate(x: Float) -> Float:
-    from ombra.ast._expressions import Literal
-    from ombra.glsl._builtins import clamp
-    from ombra.types._scalars import Float as F
+    from shadekit.ast._expressions import Literal
+    from shadekit.glsl._builtins import clamp
+    from shadekit.types._scalars import Float as F
 
     return clamp(x, Literal(0.0, F), Literal(1.0, F))
 
@@ -636,8 +636,8 @@ class TestAutoInclusion:
 
     def test_glsl_function_auto_included_in_fragment(self):
         """A @shader_function used in @prog.fragment is emitted without prog.include()."""
-        from ombra.decorators import shader_function
-        from ombra.glsl._builtins import dot
+        from shadekit.decorators import shader_function
+        from shadekit.glsl._builtins import dot
 
         @shader_function
         def luminance(c: Vec3) -> Float:
@@ -662,7 +662,7 @@ class TestAutoInclusion:
 
     def test_glsl_function_auto_included_in_vertex(self):
         """A @shader_function used in @prog.vertex Block is auto-included."""
-        from ombra.decorators import shader_function
+        from shadekit.decorators import shader_function
 
         @shader_function
         def custom_transform(p: Vec3) -> Vec4:
@@ -684,7 +684,7 @@ class TestAutoInclusion:
 
     def test_glsl_function_auto_included_in_compute(self):
         """A @shader_function used in @prog.compute Block is auto-included."""
-        from ombra.decorators import shader_function
+        from shadekit.decorators import shader_function
 
         @shader_function
         def double_it(x: Float) -> Float:
@@ -705,8 +705,8 @@ class TestAutoInclusion:
 
     def test_transitive_dependency_auto_included(self):
         """If func A calls func B, both are auto-included."""
-        from ombra.decorators import shader_function
-        from ombra.glsl._builtins import dot
+        from shadekit.decorators import shader_function
+        from shadekit.glsl._builtins import dot
 
         @shader_function
         def luminance(c: Vec3) -> Float:
@@ -738,7 +738,7 @@ class TestAutoInclusion:
 
     def test_auto_include_with_list_return(self):
         """Auto-inclusion works when returning list[Stmt] (not just Block)."""
-        from ombra.decorators import shader_function
+        from shadekit.decorators import shader_function
 
         @shader_function
         def side_effect(x: Float) -> None:
@@ -756,7 +756,7 @@ class TestAutoInclusion:
 
     def test_auto_include_with_single_stmt(self):
         """Auto-inclusion works when returning a single Stmt."""
-        from ombra.decorators import shader_function
+        from shadekit.decorators import shader_function
 
         @shader_function
         def my_scale(x: Float) -> Float:
@@ -774,8 +774,8 @@ class TestAutoInclusion:
 
     def test_no_duplicate_inclusion(self):
         """Same function used multiple times is only emitted once."""
-        from ombra.decorators import shader_function
-        from ombra.glsl._builtins import dot
+        from shadekit.decorators import shader_function
+        from shadekit.glsl._builtins import dot
 
         @shader_function
         def luminance(c: Vec3) -> Float:
@@ -811,7 +811,7 @@ class TestStage:
     def test_build_returns_stages(self):
         prog = Program()
         vert, frag = prog.build()
-        from ombra.glsl import Stage
+        from shadekit.glsl import Stage
 
         assert isinstance(vert, Stage)
         assert isinstance(frag, Stage)
@@ -833,7 +833,7 @@ class TestStage:
             return "// noop"
 
         stage = prog.build_compute()
-        from ombra.glsl import Stage
+        from shadekit.glsl import Stage
 
         assert isinstance(stage, Stage)
         assert stage.kind == "compute"

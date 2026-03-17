@@ -1,20 +1,20 @@
-"""GLSL backend for ombra — emitter, builder, builtins, and program.
+"""GLSL backend for shadekit — emitter, builder, builtins, and program.
 
 This package contains all GLSL-specific code: source emission, shader
 assembly, built-in function proxies, validation, and the high-level
 :class:`Program` API.  Language-agnostic components (AST, type system,
-optimizer, dependency graph) remain in the parent ``ombra`` package.
+optimizer, dependency graph) remain in the parent ``shadekit`` package.
 
 Quick start::
 
-    from ombra.glsl import Program, ShaderBuilder, ShaderStage
-    from ombra.glsl import emit, validate_source
-    from ombra.glsl import vec3, dot, clamp, mix   # builtin proxies
+    from shadekit.glsl import Program, ShaderBuilder, ShaderStage
+    from shadekit.glsl import emit, validate_source
+    from shadekit.glsl import vec3, dot, clamp, mix   # builtin proxies
 """
 
-from ombra.glsl._assembler import assemble_stage
-from ombra.glsl._builder import ShaderBuilder, ShaderStage
-from ombra.glsl._builtins import (
+from shadekit.glsl._assembler import assemble_stage
+from shadekit.glsl._builder import ShaderBuilder, ShaderStage
+from shadekit.glsl._builtins import (
     EmitVertex,
     EndPrimitive,
     abs,
@@ -171,10 +171,10 @@ from ombra.glsl._builtins import (
     vec3,
     vec4,
 )
-from ombra.glsl._emitter import emit, emit_expr, emit_stmt
-from ombra.glsl._function_emitter import emit_function
-from ombra.glsl._program import Program, Stage
-from ombra.glsl._validation import (
+from shadekit.glsl._emitter import emit, emit_expr, emit_stmt
+from shadekit.glsl._function_emitter import emit_function
+from shadekit.glsl._program import Program, Stage
+from shadekit.glsl._validation import (
     Severity,
     ValidationError,
     validate_builder,

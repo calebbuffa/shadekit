@@ -1,10 +1,10 @@
-"""Tests for ombra.types — GLSL type system (Phase 2)."""
+"""Tests for shadekit.types — GLSL type system (Phase 2)."""
 
 from dataclasses import dataclass
 
 import pytest
 
-from ombra.types import (
+from shadekit.types import (
     ArrayType,
     Bool,
     BVec2,

@@ -1,24 +1,24 @@
-"""Tests for ombra Phase 4 — @shader_function, DependencyGraph, Builder integration."""
+"""Tests for shadekit Phase 4 — @shader_function, DependencyGraph, Builder integration."""
 
 from __future__ import annotations
 
 import pytest
 
-from ombra.ast import (
+from shadekit.ast import (
     Declaration,
     FunctionCall,
     Literal,
     Return,
     Variable,
 )
-from ombra.compiler import (
+from shadekit.compiler import (
     CircularDependencyError,
     DependencyGraph,
 )
-from ombra.decorators import ShaderFunction, shader_function
-from ombra.glsl import emit, emit_function
-from ombra.glsl._builtins import clamp, cross, dot, mix, normalize, vec3
-from ombra.types import Float, Vec3
+from shadekit.decorators import ShaderFunction, shader_function
+from shadekit.glsl import emit, emit_function
+from shadekit.glsl._builtins import clamp, cross, dot, mix, normalize, vec3
+from shadekit.types import Float, Vec3
 
 
 class TestGlslFunction:
@@ -253,7 +253,7 @@ class TestDependencyGraph:
 
 class TestBuilderIntegration:
     def test_add_glsl_function(self) -> None:
-        from ombra.glsl import ShaderBuilder, ShaderStage
+        from shadekit.glsl import ShaderBuilder, ShaderStage
 
         @shader_function
         def double(x: Float) -> Float:
@@ -269,7 +269,7 @@ class TestBuilderIntegration:
         assert "void main() {" in frag
 
     def test_add_glsl_function_with_deps(self) -> None:
-        from ombra.glsl import ShaderBuilder, ShaderStage
+        from shadekit.glsl import ShaderBuilder, ShaderStage
 
         @shader_function
         def helper(x: Float) -> Float:
@@ -291,7 +291,7 @@ class TestBuilderIntegration:
         assert helper_pos < caller_pos
 
     def test_add_vertex_stmts(self) -> None:
-        from ombra.glsl import ShaderBuilder
+        from shadekit.glsl import ShaderBuilder
 
         b = ShaderBuilder()
 
@@ -305,7 +305,7 @@ class TestBuilderIntegration:
         assert "}" in vert
 
     def test_add_fragment_stmts_list(self) -> None:
-        from ombra.glsl import ShaderBuilder
+        from shadekit.glsl import ShaderBuilder
 
         b = ShaderBuilder()
         stmts = [
@@ -318,7 +318,7 @@ class TestBuilderIntegration:
 
     def test_backwards_compatible(self) -> None:
         """String-based API still works unchanged."""
-        from ombra.glsl import ShaderBuilder
+        from shadekit.glsl import ShaderBuilder
 
         b = ShaderBuilder()
         b.add_vertex_lines(["void main() {", "  gl_Position = vec4(0);", "}"])
@@ -329,7 +329,7 @@ class TestBuilderIntegration:
         assert "f_color = vec4(1);" in frag
 
     def test_clone_preserves_glsl_functions(self) -> None:
-        from ombra.glsl import ShaderBuilder, ShaderStage
+        from shadekit.glsl import ShaderBuilder, ShaderStage
 
         @shader_function
         def foo(x: Float) -> Float:
@@ -345,7 +345,7 @@ class TestBuilderIntegration:
 
 class TestEndToEnd:
     def test_height_color(self) -> None:
-        """The motivating example from the ombra design plan."""
+        """The motivating example from the shadekit design plan."""
 
         @shader_function
         def height_color(pos: Vec3) -> Vec3:
@@ -359,7 +359,7 @@ class TestEndToEnd:
 
     def test_full_pipeline(self) -> None:
         """Decorator → DependencyGraph → Builder → GLSL output."""
-        from ombra.glsl import ShaderBuilder, ShaderStage
+        from shadekit.glsl import ShaderBuilder, ShaderStage
 
         @shader_function
         def square(x: Float) -> Float:

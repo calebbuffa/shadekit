@@ -1,4 +1,4 @@
-"""Tests for ombra version directive handling.
+"""Tests for shadekit version directive handling.
 
 Covers:
 - _strip_version() with various #version formats (bare, profile, ES)
@@ -11,8 +11,8 @@ Covers:
 
 from __future__ import annotations
 
-from ombra.glsl import Program
-from ombra.glsl._builder import ShaderBuilder
+from shadekit.glsl import Program
+from shadekit.glsl._builder import ShaderBuilder
 
 
 class TestStripVersion:
@@ -198,7 +198,7 @@ class TestFromComputeGlslVersionHandling:
         assert self._count_version_lines(out) == 1
 
     def test_with_injected_define(self):
-        from ombra.glsl._builder import ShaderStage
+        from shadekit.glsl._builder import ShaderStage
 
         src = "#version 430 core\nlayout(local_size_x = 64) in;\nvoid main() { }"
         b = ShaderBuilder.from_compute_glsl(src)

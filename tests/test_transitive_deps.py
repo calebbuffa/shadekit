@@ -7,10 +7,10 @@ instances in correct dependency order.
 
 from __future__ import annotations
 
-from ombra.compiler import collect_transitive_deps
-from ombra.decorators import shader_function
-from ombra.glsl import Program, clamp, dot, mix, vec3
-from ombra.types import Float, Vec3
+from shadekit.compiler import collect_transitive_deps
+from shadekit.decorators import shader_function
+from shadekit.glsl import Program, clamp, dot, mix, vec3
+from shadekit.types import Float, Vec3
 
 # ── Fixtures ─────────────────────────────────────────────────────────
 
@@ -212,7 +212,7 @@ class TestStageDecoratorAutoInclude:
     """@prog.fragment auto-includes referenced shader_functions transitively."""
 
     def test_auto_include_via_ast_stmts(self) -> None:
-        from ombra.ast import Return, Variable
+        from shadekit.ast import Return, Variable
 
         prog = Program()
         c_var = Variable("c", Vec3)

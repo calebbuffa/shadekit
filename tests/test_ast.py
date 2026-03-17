@@ -1,10 +1,10 @@
-"""Tests for ombra Phase 3 — Expression AST, Statement AST, and GLSL emitter."""
+"""Tests for shadekit Phase 3 — Expression AST, Statement AST, and GLSL emitter."""
 
 from __future__ import annotations
 
 import pytest
 
-from ombra.ast import (
+from shadekit.ast import (
     Assignment,
     BinaryOp,
     ConstructorCall,
@@ -20,8 +20,8 @@ from ombra.ast import (
     UnaryOp,
     Variable,
 )
-from ombra.glsl import emit
-from ombra.types import (
+from shadekit.glsl import emit
+from shadekit.types import (
     Bool,
     Float,
     Int,

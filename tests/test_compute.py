@@ -1,4 +1,4 @@
-"""Tests for ombra compute shader support.
+"""Tests for shadekit compute shader support.
 
 Covers:
 - ShaderStage.COMPUTE enum value
@@ -12,24 +12,24 @@ Covers:
 
 from __future__ import annotations
 
-from ombra.compiler import ShaderCache, hash_sources
+from shadekit.compiler import ShaderCache, hash_sources
 
 # Module-level @shader_function for test_compute_with_glsl_function
 # (get_type_hints requires types to be resolvable in the defining scope).
-from ombra.decorators import shader_function
-from ombra.glsl import (
+from shadekit.decorators import shader_function
+from shadekit.glsl import (
     ShaderBuilder,
     ShaderStage,
     validate_compute_builder,
     validate_source,
 )
-from ombra.glsl._builtins import sqrt as _sqrt
-from ombra.glsl._validation import (
+from shadekit.glsl._builtins import sqrt as _sqrt
+from shadekit.glsl._validation import (
     Severity,
     _check_compute_builtins,
     _check_compute_local_size,
 )
-from ombra.types import Float as _Float
+from shadekit.types import Float as _Float
 
 
 @shader_function
@@ -251,46 +251,46 @@ void main() {
 
 class TestComputeBuiltins:
     def test_barrier(self):
-        from ombra.glsl._builtins import barrier
+        from shadekit.glsl._builtins import barrier
 
         node = barrier()
         assert node.func_name == "barrier"
         assert node.glsl_type is None  # void
 
     def test_memory_barrier(self):
-        from ombra.glsl._builtins import memoryBarrier
+        from shadekit.glsl._builtins import memoryBarrier
 
         node = memoryBarrier()
         assert node.func_name == "memoryBarrier"
 
     def test_group_memory_barrier(self):
-        from ombra.glsl._builtins import groupMemoryBarrier
+        from shadekit.glsl._builtins import groupMemoryBarrier
 
         node = groupMemoryBarrier()
         assert node.func_name == "groupMemoryBarrier"
 
     def test_memory_barrier_buffer(self):
-        from ombra.glsl._builtins import memoryBarrierBuffer
+        from shadekit.glsl._builtins import memoryBarrierBuffer
 
         node = memoryBarrierBuffer()
         assert node.func_name == "memoryBarrierBuffer"
 
     def test_memory_barrier_shared(self):
-        from ombra.glsl._builtins import memoryBarrierShared
+        from shadekit.glsl._builtins import memoryBarrierShared
 
         node = memoryBarrierShared()
         assert node.func_name == "memoryBarrierShared"
 
     def test_memory_barrier_image(self):
-        from ombra.glsl._builtins import memoryBarrierImage
+        from shadekit.glsl._builtins import memoryBarrierImage
 
         node = memoryBarrierImage()
         assert node.func_name == "memoryBarrierImage"
 
     def test_atomic_add(self):
-        from ombra.ast import Variable
-        from ombra.glsl._builtins import atomicAdd
-        from ombra.types import UInt
+        from shadekit.ast import Variable
+        from shadekit.glsl._builtins import atomicAdd
+        from shadekit.types import UInt
 
         mem = Variable("counter", UInt)
         data = Variable("val", UInt)
@@ -299,33 +299,33 @@ class TestComputeBuiltins:
         assert node.glsl_type is UInt
 
     def test_atomic_min(self):
-        from ombra.ast import Variable
-        from ombra.glsl._builtins import atomicMin
-        from ombra.types import UInt
+        from shadekit.ast import Variable
+        from shadekit.glsl._builtins import atomicMin
+        from shadekit.types import UInt
 
         node = atomicMin(Variable("a", UInt), Variable("b", UInt))
         assert node.func_name == "atomicMin"
 
     def test_atomic_max(self):
-        from ombra.ast import Variable
-        from ombra.glsl._builtins import atomicMax
-        from ombra.types import UInt
+        from shadekit.ast import Variable
+        from shadekit.glsl._builtins import atomicMax
+        from shadekit.types import UInt
 
         node = atomicMax(Variable("a", UInt), Variable("b", UInt))
         assert node.func_name == "atomicMax"
 
     def test_atomic_exchange(self):
-        from ombra.ast import Variable
-        from ombra.glsl._builtins import atomicExchange
-        from ombra.types import UInt
+        from shadekit.ast import Variable
+        from shadekit.glsl._builtins import atomicExchange
+        from shadekit.types import UInt
 
         node = atomicExchange(Variable("m", UInt), Variable("v", UInt))
         assert node.func_name == "atomicExchange"
 
     def test_atomic_comp_swap(self):
-        from ombra.ast import Variable
-        from ombra.glsl._builtins import atomicCompSwap
-        from ombra.types import UInt
+        from shadekit.ast import Variable
+        from shadekit.glsl._builtins import atomicCompSwap
+        from shadekit.types import UInt
 
         node = atomicCompSwap(
             Variable("m", UInt), Variable("c", UInt), Variable("d", UInt)
@@ -333,10 +333,10 @@ class TestComputeBuiltins:
         assert node.func_name == "atomicCompSwap"
 
     def test_image_load(self):
-        from ombra.ast import Variable
-        from ombra.glsl._builtins import imageLoad
-        from ombra.types import Vec4
-        from ombra.types._samplers import Sampler2D
+        from shadekit.ast import Variable
+        from shadekit.glsl._builtins import imageLoad
+        from shadekit.types import Vec4
+        from shadekit.types._samplers import Sampler2D
 
         img = Variable("img", Sampler2D)
         coord = Variable("c", Vec4)
@@ -345,10 +345,10 @@ class TestComputeBuiltins:
         assert node.glsl_type is Vec4
 
     def test_image_store(self):
-        from ombra.ast import Variable
-        from ombra.glsl._builtins import imageStore
-        from ombra.types import Vec4
-        from ombra.types._samplers import Sampler2D
+        from shadekit.ast import Variable
+        from shadekit.glsl._builtins import imageStore
+        from shadekit.types import Vec4
+        from shadekit.types._samplers import Sampler2D
 
         img = Variable("img", Sampler2D)
         coord = Variable("c", Vec4)
@@ -358,10 +358,10 @@ class TestComputeBuiltins:
         assert node.glsl_type is None  # void
 
     def test_image_atomic_add(self):
-        from ombra.ast import Variable
-        from ombra.glsl._builtins import imageAtomicAdd
-        from ombra.types import UInt
-        from ombra.types._samplers import Sampler2D
+        from shadekit.ast import Variable
+        from shadekit.glsl._builtins import imageAtomicAdd
+        from shadekit.types import UInt
+        from shadekit.types._samplers import Sampler2D
 
         node = imageAtomicAdd(
             Variable("img", Sampler2D), Variable("c", UInt), Variable("d", UInt)
